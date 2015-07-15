@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>SVG Sprites demo</title>
+</head>
+<body>
+  <svg svg-sprite="base:svg-logo" width="144" height="48"></svg>
+  <svg svg-sprite="base:svg-hand" width="144" height="48"></svg>
+  <svg svg-sprite="base:svg-loader" width="144" height="48"></svg>
+  <svg svg-sprite="base:svg-menu" width="144" height="48"></svg>
+  <script src="svg-sprites-render.js"></script>
+  <script>
+    svgSet = new svgSprites()
+    svgSet.load('sprites.svg', 'base')
+    svgSet.render()
+  </script>
+</body>
+</html>
