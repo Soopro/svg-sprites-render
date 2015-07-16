@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.4
+# Version:  0.0.5
 # -------------------------------
 
 if not window
