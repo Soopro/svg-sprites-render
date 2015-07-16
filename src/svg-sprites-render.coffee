@@ -100,7 +100,7 @@ window.svgSprites = ->
         el.innerHTML = group[id].code
         el.setAttribute('viewBox', group[id].view)
       else
-        console.error("SVG Sprite "+target+"not found")
+        console.error("SVG Sprite '"+target+"' not found")
     return
   
   @load = (svg_url, svg_name) ->
