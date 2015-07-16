@@ -60,18 +60,22 @@
       }
     };
     append_svg = function(data, name) {
-      var err, fragment, i, len, ref, svg, svgs;
+      var err, fragment, i, len, ref, svg, svgs, view_box;
       fragment = document.createElement("div");
       fragment.innerHTML = data;
-      svgs = fragment.querySelectorAll("[id][viewBox]");
+      svgs = fragment.querySelectorAll("[id]");
       sprites[name] = {};
       for (i = 0, len = svgs.length; i < len; i++) {
         svg = svgs[i];
         try {
+          view_box = svg.getAttribute('viewBox');
+          if (!view_box) {
+            continue;
+          }
           if (ref = svg.id, indexOf.call(sprites[name], ref) < 0) {
             sprites[name][svg.id] = {
               code: svg.innerHTML,
-              view: svg.getAttribute('viewBox')
+              view: view_box
             };
           } else {
             throw new Error("SVG ID is duplicated!!");
@@ -95,7 +99,7 @@
           continue;
         }
         target_split = target.split(":");
-        if (target.length < 2) {
+        if (target_split.length < 2) {
           continue;
         }
         gp = target_split[0];

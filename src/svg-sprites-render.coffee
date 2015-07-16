@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.3
+# Version:  0.0.4
 # -------------------------------
 
 if not window
@@ -68,14 +68,17 @@ window.svgSprites = ->
   append_svg = (data, name) ->
     fragment = document.createElement("div")
     fragment.innerHTML = data
-    svgs = fragment.querySelectorAll("[id][viewBox]")
+    svgs = fragment.querySelectorAll("[id]")
     sprites[name] = {}
     for svg in svgs
       try
+        view_box = svg.getAttribute('viewBox')
+        if not view_box
+          continue
         if svg.id not in sprites[name]
           sprites[name][svg.id] = 
             code: svg.innerHTML
-            view: svg.getAttribute('viewBox')
+            view: view_box
         else
           throw new Error("SVG ID is duplicated!!")
       catch err
@@ -91,11 +94,13 @@ window.svgSprites = ->
       if not target
         continue
       target_split = target.split(":")
-      if target.length < 2
+      if target_split.length < 2
         continue
+      
       gp = target_split[0]
       id = target_split[1]
       group = sprites[gp]
+      
       if id and group and group.hasOwnProperty(id)
         el.innerHTML = group[id].code
         el.setAttribute('viewBox', group[id].view)
