@@ -60,7 +60,7 @@
       }
     };
     append_svg = function(data, name) {
-      var err, fragment, i, len, ref, svg, svgs, view_box;
+      var child, err, fragment, i, len, ref, svg, svgs, view_box;
       fragment = document.createElement("div");
       fragment.innerHTML = data;
       svgs = fragment.querySelectorAll("[id]");
@@ -74,7 +74,18 @@
           }
           if (ref = svg.id, indexOf.call(sprites[name], ref) < 0) {
             sprites[name][svg.id] = {
-              code: svg.innerHTML,
+              children: (function() {
+                var j, len1, ref1, results;
+                ref1 = svg.childNodes;
+                results = [];
+                for (j = 0, len1 = ref1.length; j < len1; j++) {
+                  child = ref1[j];
+                  if (child.nodeType === 1) {
+                    results.push(child);
+                  }
+                }
+                return results;
+              })(),
               view: view_box
             };
           } else {
@@ -87,14 +98,14 @@
       }
     };
     render_svg = function(root) {
-      var el, elements, gp, group, i, id, len, target, target_split;
+      var child, gp, group, i, id, j, len, len1, ref, svg, svg_elements, target, target_split;
       if (!root) {
         root = document;
       }
-      elements = root.querySelectorAll("svg[svg-sprite]");
-      for (i = 0, len = elements.length; i < len; i++) {
-        el = elements[i];
-        target = el.getAttribute("svg-sprite");
+      svg_elements = root.querySelectorAll("svg[svg-sprite]");
+      for (i = 0, len = svg_elements.length; i < len; i++) {
+        svg = svg_elements[i];
+        target = svg.getAttribute("svg-sprite");
         if (!target) {
           continue;
         }
@@ -106,8 +117,12 @@
         id = target_split[1];
         group = sprites[gp];
         if (id && group && group.hasOwnProperty(id)) {
-          el.innerHTML = group[id].code;
-          el.setAttribute('viewBox', group[id].view);
+          ref = group[id].children;
+          for (j = 0, len1 = ref.length; j < len1; j++) {
+            child = ref[j];
+            svg.appendChild(child);
+          }
+          svg.setAttribute('viewBox', group[id].view);
         } else {
           console.error("SVG Sprite '" + target + "' not found");
         }

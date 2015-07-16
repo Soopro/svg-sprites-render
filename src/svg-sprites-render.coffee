@@ -77,7 +77,7 @@ window.svgSprites = ->
           continue
         if svg.id not in sprites[name]
           sprites[name][svg.id] = 
-            code: svg.innerHTML
+            children: (child for child in svg.childNodes when child.nodeType is 1)
             view: view_box
         else
           throw new Error("SVG ID is duplicated!!")
@@ -88,9 +88,9 @@ window.svgSprites = ->
   render_svg = (root) ->
     if not root
       root = document
-    elements = root.querySelectorAll("svg[svg-sprite]")
-    for el in elements
-      target = el.getAttribute("svg-sprite")
+    svg_elements = root.querySelectorAll("svg[svg-sprite]")
+    for svg in svg_elements
+      target = svg.getAttribute("svg-sprite")
       if not target
         continue
       target_split = target.split(":")
@@ -99,11 +99,13 @@ window.svgSprites = ->
       
       gp = target_split[0]
       id = target_split[1]
+
       group = sprites[gp]
       
       if id and group and group.hasOwnProperty(id)
-        el.innerHTML = group[id].code
-        el.setAttribute('viewBox', group[id].view)
+        for child in group[id].children
+          svg.appendChild(child)
+        svg.setAttribute('viewBox', group[id].view)
       else
         console.error("SVG Sprite '"+target+"' not found")
     return
