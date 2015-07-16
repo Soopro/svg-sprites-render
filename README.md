@@ -1,7 +1,15 @@
 # Svg Sprites Render
 
-Idea is load multiple svg sprites files into sprites object, then render to `<svg>` on html page.
+Able to load multiple svg sprites files into sprites object, then render to `<svg>` element on html page. 
 
+Tested on MacOS 10.10.4
+* Chrome 43.0.2357.132 (64-bit)
+* Safari 8.0.7 (10600.7.12)
+* Opera 12.16 build 1860
+* Firefox 38.0.5
+
+*Note: Version before 0.0.4 (include itself) dosen't support Safari and Opera, My bad....
+Never tested on Windows IE.
 
 ## Usage
 
