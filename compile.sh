@@ -1,19 +1,8 @@
 #!/bin/bash
 
-if [ -d "build" ]
-then
-  rm -rf build
-fi
+coffee -c -o . src
 
-coffee -c -o build src
-
-if [ -d "dist" ]
-then
-  rm -rf dist
-fi
-
-mkdir dist
-uglifyjs build/svg-sprites-render.js -m -p -o dist/svg-sprites-render.min.js
+uglifyjs svg-sprites-render.js -m -p -o svg-sprites-render.min.js
 
 if [ -d "demo" ]
 then
