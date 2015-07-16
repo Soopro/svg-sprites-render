@@ -38,7 +38,7 @@ window.svgSprites = ->
     # timeout
     xmlhttp.timeout = req_timeout
     xmlhttp.ontimeout = ->
-      console.error("The request for " + req_url + " timed out.")
+      console.error("The request for "+req_url+" timed out.")
     
     # statechange
     xmlhttp.onreadystatechange = ->
@@ -87,15 +87,20 @@ window.svgSprites = ->
       root = document
     elements = root.querySelectorAll("svg[svg-sprite]")
     for el in elements
-      targets = el.getAttribute("svg-sprite").split(":")
-      if targets.length < 2
+      target = el.getAttribute("svg-sprite")
+      if not target
         continue
-      gp = targets[0]
-      id = targets[1]
+      target_split = target.split(":")
+      if target.length < 2
+        continue
+      gp = target_split[0]
+      id = target_split[1]
       group = sprites[gp]
       if id and group and group.hasOwnProperty(id)
         el.innerHTML = group[id].code
         el.setAttribute('viewBox', group[id].view)
+      else
+        console.error("SVG Sprite "+target+"not found")
     return
   
   @load = (svg_url, svg_name) ->

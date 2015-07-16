@@ -83,23 +83,29 @@
       }
     };
     render_svg = function(root) {
-      var el, elements, gp, group, i, id, len, targets;
+      var el, elements, gp, group, i, id, len, target, target_split;
       if (!root) {
         root = document;
       }
       elements = root.querySelectorAll("svg[svg-sprite]");
       for (i = 0, len = elements.length; i < len; i++) {
         el = elements[i];
-        targets = el.getAttribute("svg-sprite").split(":");
-        if (targets.length < 2) {
+        target = el.getAttribute("svg-sprite");
+        if (!target) {
           continue;
         }
-        gp = targets[0];
-        id = targets[1];
+        target_split = target.split(":");
+        if (target.length < 2) {
+          continue;
+        }
+        gp = target_split[0];
+        id = target_split[1];
         group = sprites[gp];
         if (id && group && group.hasOwnProperty(id)) {
           el.innerHTML = group[id].code;
           el.setAttribute('viewBox', group[id].view);
+        } else {
+          console.error("SVG Sprite " + target + "not found");
         }
       }
     };
