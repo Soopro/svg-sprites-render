@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.1
+# Version:  0.0.2
 # -------------------------------
 
 if not window
@@ -68,7 +68,7 @@ window.svgSprites = ->
   append_svg = (data, name) ->
     fragment = document.createElement("div")
     fragment.innerHTML = data
-    svgs = fragment.querySelectorAll("[id], [viewBox]")
+    svgs = fragment.querySelectorAll("[id][viewBox]")
     sprites[name] = {}
     for svg in svgs
       try

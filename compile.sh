@@ -10,10 +10,9 @@ coffee -c -o build src
 if [ -d "dist" ]
 then
   rm -rf dist
-else
-  mkdir dist
 fi
 
+mkdir dist
 uglifyjs build/svg-sprites-render.js -m -p -o dist/svg-sprites-render.min.js
 
 if [ -d "demo" ]

@@ -63,7 +63,7 @@
       var err, fragment, i, len, ref, svg, svgs;
       fragment = document.createElement("div");
       fragment.innerHTML = data;
-      svgs = fragment.querySelectorAll("[id], [viewBox]");
+      svgs = fragment.querySelectorAll("[id][viewBox]");
       sprites[name] = {};
       for (i = 0, len = svgs.length; i < len; i++) {
         svg = svgs[i];
