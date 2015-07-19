@@ -7,7 +7,7 @@
   }
 
   window.svgSprites = function() {
-    var append_svg, load_stack, remove_load, render_svg, request, self, sprites;
+    var append_svg, isHTMLElement, load_stack, remove_load, render_svg, request, self, sprites;
     sprites = {};
     load_stack = [];
     self = this;
@@ -97,12 +97,23 @@
         }
       }
     };
-    render_svg = function(root) {
+    isHTMLElement = function(o) {
+      var is_obj, is_obj_type, result;
+      is_obj = o && typeof o === 'object' && o !== null;
+      is_obj_type = o.nodeType === 1 && typeof o.nodeName === 'string';
+      result = is_obj && is_obj_type;
+      return result;
+    };
+    render_svg = function(element) {
       var child, gp, group, i, id, j, len, len1, ref, svg, svg_elements, target, target_split;
-      if (!root) {
-        root = document;
+      if (!element || !isHTMLElement(element)) {
+        element = document;
       }
-      svg_elements = root.querySelectorAll("svg[svg-sprite]");
+      if (element.nodeName.toUpperCase() === 'SVG' && element.getAttribute("svg-sprite")) {
+        svg_elements = [element];
+      } else {
+        svg_elements = element.querySelectorAll("svg[svg-sprite]");
+      }
       for (i = 0, len = svg_elements.length; i < len; i++) {
         svg = svg_elements[i];
         target = svg.getAttribute("svg-sprite");
@@ -116,6 +127,9 @@
         gp = target_split[0];
         id = target_split[1];
         group = sprites[gp];
+        while (svg.firstChild) {
+          svg.removeChild(svg.firstChild);
+        }
         if (id && group && group.hasOwnProperty(id)) {
           ref = group[id].children;
           for (j = 0, len1 = ref.length; j < len1; j++) {
@@ -146,7 +160,7 @@
         }
       });
     };
-    this.render = function(timeout) {
+    this.render = function(element, timeout) {
       var timer;
       if (!timeout) {
         timeout = 30000;
@@ -157,7 +171,7 @@
         try {
           if (load_stack.length >= 0) {
             clearInterval(timer);
-            render_svg();
+            render_svg(element);
           }
           if (new Date().getTime() > timeout) {
             clearInterval(timer);

@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.5
+# Version:  0.0.6
 # -------------------------------
 
 if not window
@@ -85,10 +85,21 @@ window.svgSprites = ->
         console.error err
     return
   
-  render_svg = (root) ->
-    if not root
-      root = document
-    svg_elements = root.querySelectorAll("svg[svg-sprite]")
+  isHTMLElement = (o) ->
+    is_obj = o and typeof o == 'object' and o != null
+    is_obj_type = o.nodeType is 1 and typeof o.nodeName is 'string'
+    result =  is_obj and is_obj_type
+    return result
+  
+  render_svg = (element) ->
+    if not element or not isHTMLElement(element)
+      element = document
+    
+    if element.nodeName.toUpperCase() is 'SVG' and element.getAttribute("svg-sprite")
+      svg_elements = [element]
+    else
+      svg_elements = element.querySelectorAll("svg[svg-sprite]")
+    
     for svg in svg_elements
       target = svg.getAttribute("svg-sprite")
       if not target
@@ -101,6 +112,9 @@ window.svgSprites = ->
       id = target_split[1]
 
       group = sprites[gp]
+      
+      while svg.firstChild
+        svg.removeChild(svg.firstChild)
       
       if id and group and group.hasOwnProperty(id)
         for child in group[id].children
@@ -126,7 +140,7 @@ window.svgSprites = ->
         return
     return
   
-  @render = (timeout)->
+  @render = (element, timeout)->
     if not timeout
       timeout = 30000
     timeout = new Date().getTime()+timeout
@@ -135,7 +149,7 @@ window.svgSprites = ->
       try
         if load_stack.length >= 0
           clearInterval(timer)
-          render_svg()
+          render_svg(element)
         if new Date().getTime() > timeout
           clearInterval(timer)
           throw new Error("SVG Sprites render timeout!!")
