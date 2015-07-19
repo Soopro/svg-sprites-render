@@ -47,6 +47,8 @@ You should have start up a web server e ```loaclhost```.
 
 ***svgSprites.render***
 
+[element]: render all children of this element, default is document.
+
 Render svg sprites to page, after all sprites files is loaded.
 
 You might need re-render after dynamic modifed any `<svg>` tags.
