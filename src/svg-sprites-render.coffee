@@ -159,8 +159,4 @@ window.svgSprites = ->
     
     return
     
-      
-  
-  
-  
   return @
