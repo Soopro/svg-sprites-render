@@ -115,13 +115,14 @@ window.svgSprites = ->
       
       while svg.firstChild
         svg.removeChild(svg.firstChild)
-      
+        
       if id and group and group.hasOwnProperty(id)
         for child in group[id].children
           svg.appendChild(child)
         svg.setAttribute('viewBox', group[id].view)
       else
-        console.error("SVG Sprite '"+target+"' not found")
+        console.error "SVG Sprite '"+target+"' not found:"
+        console.error group, id, group.hasOwnProperty(id)
     return
   
   @load = (svg_url, svg_name) ->
