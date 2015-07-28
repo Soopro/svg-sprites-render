@@ -122,17 +122,18 @@ window.svgSprites = ->
         svg.setAttribute('viewBox', group[id].view)
       else
         console.error "SVG Sprite '"+target+"' not found:"
-        console.error group, id, group.hasOwnProperty(id)
+        console.error sprites, group, id
     return
   
   @load = (svg_url, svg_name) ->
     load_stack.push(svg_url)
+    if not svg_name
+      svg_name = svg_url.replace(/^.*[\\\/]/, '')
+
     request
       type: 'GET'
       url: svg_url
-      success: (data) ->
-        if not svg_name
-          svg_name = svg_url.replace(/^.*[\\\/]/, '')
+      success: (data) ->        
         append_svg(data, svg_name)
         remove_load(svg_url)
       error: (xhr, type) ->

@@ -139,19 +139,19 @@
           svg.setAttribute('viewBox', group[id].view);
         } else {
           console.error("SVG Sprite '" + target + "' not found:");
-          console.error(group, id, group.hasOwnProperty(id));
+          console.error(sprites, group, id);
         }
       }
     };
     this.load = function(svg_url, svg_name) {
       load_stack.push(svg_url);
+      if (!svg_name) {
+        svg_name = svg_url.replace(/^.*[\\\/]/, '');
+      }
       request({
         type: 'GET',
         url: svg_url,
         success: function(data) {
-          if (!svg_name) {
-            svg_name = svg_url.replace(/^.*[\\\/]/, '');
-          }
           append_svg(data, svg_name);
           return remove_load(svg_url);
         },
