@@ -133,7 +133,7 @@ window.svgSprites = ->
     
     load_stack.push(svg_url)
     
-    console.log "SVG Sprite load "+svg_url+" ["+svg_name+"]"
+    console.log "SVG Sprites load "+svg_url+" ["+svg_name+"]"
     
     request
       type: 'GET'
