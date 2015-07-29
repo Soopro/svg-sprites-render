@@ -104,6 +104,7 @@ window.svgSprites = ->
       target = svg.getAttribute("svg-sprite")
       if not target
         continue
+
       target_split = target.split(":")
       if target_split.length < 2
         continue
@@ -112,24 +113,28 @@ window.svgSprites = ->
       id = target_split[1]
 
       group = sprites[gp]
-      
+
       while svg.firstChild
         svg.removeChild(svg.firstChild)
-        
+      
       if id and group and group.hasOwnProperty(id)
         for child in group[id].children
           svg.appendChild(child)
         svg.setAttribute('viewBox', group[id].view)
       else
         console.error "SVG Sprite '"+target+"' not found:"
-        console.error sprites, group, id
+        console.log gp, id
+        console.log sprites, group
     return
   
   @load = (svg_url, svg_name) ->
-    load_stack.push(svg_url)
     if not svg_name
       svg_name = svg_url.replace(/^.*[\\\/]/, '')
-
+    
+    load_stack.push(svg_url)
+    
+    console.log "SVG Sprite load "+svg_url+" ["+svg_name+"]"
+    
     request
       type: 'GET'
       url: svg_url
@@ -149,7 +154,7 @@ window.svgSprites = ->
     
     timer = setInterval ->
       try
-        if load_stack.length >= 0
+        if load_stack.length <= 0
           clearInterval(timer)
           render_svg(element)
         if new Date().getTime() > timeout

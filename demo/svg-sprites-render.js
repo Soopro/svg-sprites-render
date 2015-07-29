@@ -139,15 +139,17 @@
           svg.setAttribute('viewBox', group[id].view);
         } else {
           console.error("SVG Sprite '" + target + "' not found:");
-          console.error(sprites, group, id);
+          console.log(gp, id);
+          console.log(sprites, group);
         }
       }
     };
     this.load = function(svg_url, svg_name) {
-      load_stack.push(svg_url);
       if (!svg_name) {
         svg_name = svg_url.replace(/^.*[\\\/]/, '');
       }
+      load_stack.push(svg_url);
+      console.log("SVG Sprite load " + svg_url + " [" + svg_name + "]");
       request({
         type: 'GET',
         url: svg_url,
@@ -170,7 +172,7 @@
       timer = setInterval(function() {
         var err;
         try {
-          if (load_stack.length >= 0) {
+          if (load_stack.length <= 0) {
             clearInterval(timer);
             render_svg(element);
           }
