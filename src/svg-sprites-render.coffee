@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.7
+# Version:  0.0.8
 # -------------------------------
 
 if not window
@@ -119,7 +119,7 @@ window.svgSprites = ->
       
       if id and group and group.hasOwnProperty(id)
         for child in group[id].children
-          svg.appendChild(child)
+          svg.appendChild(child.cloneNode(true))
         svg.setAttribute('viewBox', group[id].view)
       else
         console.error "SVG Sprite '"+target+"' not found:"

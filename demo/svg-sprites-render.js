@@ -134,7 +134,7 @@
           ref = group[id].children;
           for (j = 0, len1 = ref.length; j < len1; j++) {
             child = ref[j];
-            svg.appendChild(child);
+            svg.appendChild(child.cloneNode(true));
           }
           svg.setAttribute('viewBox', group[id].view);
         } else {
