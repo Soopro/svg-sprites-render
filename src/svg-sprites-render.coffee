@@ -170,18 +170,28 @@ window.svgSprites = ->
     
   return @
 
+inited = false
+
+init = ->
+  if inited
+    return
+  svgSet = new svgSprites()
+  svgURLs = document.querySelectorAll '[svg-sprites-loader]'
+  if not svgURLs or svgURLs.length <= 0
+    return
+  for spr in svgURLs
+    url = spr.dataset.url
+    group = spr.dataset.name
+    if typeof url is 'string' and typeof group is 'string'
+      svgSet.load(url, group)
+  svgSet.render()
+  inited = true
+
 # Automatic
-if document.addEventListener
+if document.readyState == "complete" or document.readyState == "loaded"
+    init()
+else if document.addEventListener
   document.addEventListener 'DOMContentLoaded', ->
     document.removeEventListener 'DOMContentLoaded', arguments.callee, false
-    svgSet = new svgSprites()
-    svgURLs = document.querySelectorAll '[svg-sprites-loader]'
-    if not svgURLs or svgURLs.length <= 0
-      return
-    for spr in svgURLs
-      url = spr.dataset.url
-      group = spr.dataset.name
-      if typeof url is 'string' and typeof group is 'string'
-        svgSet.load(url, group)
-    svgSet.render()
+    init()
   , false
