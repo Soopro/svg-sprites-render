@@ -189,4 +189,25 @@
     return this;
   };
 
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var group, i, len, spr, svgSet, svgURLs, url;
+      document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+      svgSet = new svgSprites();
+      svgURLs = document.querySelectorAll('[svg-sprites-loader]');
+      if (!svgURLs || svgURLs.length <= 0) {
+        return;
+      }
+      for (i = 0, len = svgURLs.length; i < len; i++) {
+        spr = svgURLs[i];
+        url = spr.dataset.url;
+        group = spr.dataset.name;
+        if (typeof url === 'string' && typeof group === 'string') {
+          svgSet.load(url, group);
+        }
+      }
+      return svgSet.render();
+    }, false);
+  }
+
 }).call(this);

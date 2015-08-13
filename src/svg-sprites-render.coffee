@@ -6,7 +6,7 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.8
+# Version:  0.0.9
 # -------------------------------
 
 if not window
@@ -77,7 +77,8 @@ window.svgSprites = ->
           continue
         if svg.id not in sprites[name]
           sprites[name][svg.id] = 
-            children: (child for child in svg.childNodes when child.nodeType is 1)
+            children: (child for child in svg.childNodes \
+                                         when child.nodeType is 1)
             view: view_box
         else
           throw new Error("SVG ID is duplicated!!")
@@ -95,7 +96,8 @@ window.svgSprites = ->
     if not element or not isHTMLElement(element)
       element = document
     
-    if element.nodeName.toUpperCase() is 'SVG' and element.getAttribute("svg-sprite")
+    if element.nodeName.toUpperCase() is 'SVG' \
+    and element.getAttribute("svg-sprite")
       svg_elements = [element]
     else
       svg_elements = element.querySelectorAll("svg[svg-sprite]")
@@ -167,3 +169,19 @@ window.svgSprites = ->
     return
     
   return @
+
+# Automatic
+if document.addEventListener
+  document.addEventListener 'DOMContentLoaded', ->
+    document.removeEventListener 'DOMContentLoaded', arguments.callee, false
+    svgSet = new svgSprites()
+    svgURLs = document.querySelectorAll '[svg-sprites-loader]'
+    if not svgURLs or svgURLs.length <= 0
+      return
+    for spr in svgURLs
+      url = spr.dataset.url
+      group = spr.dataset.name
+      if typeof url is 'string' and typeof group is 'string'
+        svgSet.load(url, group)
+    svgSet.render()
+  , false
