@@ -33,7 +33,15 @@ Never tested on Windows IE.
 <svg svg-sprite="group1:svg-id" width="100" height="100"></svg>
 ```
 
-***note***
+*** automatic load ***
+```html
+<body svg-sprites-loader 
+ data-url="/styles/svgdefs.svg"
+ data-name="base">
+```
+
+
+*** note ***
 
 `svg-id` is the id you set by sprite generator, etc., icomoon.io
 this srcipt support all generator which can produce 'id' and `viewBox` attributes for sprites.
