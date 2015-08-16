@@ -175,7 +175,7 @@ inited = false
 init = ->
   if inited
     return
-  svgSet = new svgSprites()
+  svgSets = new svgSprites()
   svgURLs = document.querySelectorAll '[svg-sprites-loader]'
   if not svgURLs or svgURLs.length <= 0
     return
@@ -183,8 +183,8 @@ init = ->
     url = spr.dataset.url
     group = spr.dataset.name
     if typeof url is 'string' and typeof group is 'string'
-      svgSet.load(url, group)
-  svgSet.render()
+      svgSets.load(url, group)
+  svgSets.render()
   inited = true
 
 # Automatic

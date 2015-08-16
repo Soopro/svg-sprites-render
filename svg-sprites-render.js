@@ -193,11 +193,11 @@
   inited = false;
 
   init = function() {
-    var group, i, len, spr, svgSet, svgURLs, url;
+    var group, i, len, spr, svgSets, svgURLs, url;
     if (inited) {
       return;
     }
-    svgSet = new svgSprites();
+    svgSets = new svgSprites();
     svgURLs = document.querySelectorAll('[svg-sprites-loader]');
     if (!svgURLs || svgURLs.length <= 0) {
       return;
@@ -207,10 +207,10 @@
       url = spr.dataset.url;
       group = spr.dataset.name;
       if (typeof url === 'string' && typeof group === 'string') {
-        svgSet.load(url, group);
+        svgSets.load(url, group);
       }
     }
-    svgSet.render();
+    svgSets.render();
     return inited = true;
   };
 
