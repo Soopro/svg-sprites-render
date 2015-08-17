@@ -51,7 +51,7 @@ this srcipt support all generator which can produce 'id' and `viewBox` attribute
 ***svgSprites.load***
 
 Load svg sprites files, cross origin or local file might not work at this time.
-You should have start up a web server e ```loaclhost```.
+You should have start up a web server e ```localhost```.
 
 ***svgSprites.render***
 
