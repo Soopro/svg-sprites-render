@@ -6,13 +6,14 @@
 #
 # Author:   redy
 # Date:     14 July 2015
-# Version:  0.0.9
 # -------------------------------
 
 if not window
   throw new Error("For web browser only!!")
 
 window.svgSprites = ->
+  version = '1.1.0'
+  
   sprites = {}
   load_stack = []
   self = @
@@ -56,6 +57,7 @@ window.svgSprites = ->
     # fire
     xmlhttp.open("GET", req_url, req_async, req_user, req_password)
     xmlhttp.setRequestHeader("Accept", "text/xml")
+    xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xmlhttp.send()
 
   
