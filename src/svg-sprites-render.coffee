@@ -189,4 +189,6 @@ init = ->
 if document.readyState == "complete" or document.readyState == "loaded"
     init()
 else if document.addEventListener
-  document.addEventListener 'DOMContentLoaded', -> init(), false
+  document.addEventListener 'DOMContentLoaded', ->
+    init()
+  , false

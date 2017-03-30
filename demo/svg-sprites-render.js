@@ -3,13 +3,9 @@
   var init, inited,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  if (!window) {
-    throw new Error("For web browser only!!");
-  }
-
   window.svgSprites = function() {
     var append_svg, isHTMLElement, load_stack, remove_load, render_svg, request, self, sprites, version;
-    version = '1.1.0';
+    version = '1.1.1';
     sprites = {};
     load_stack = [];
     self = this;
@@ -200,7 +196,7 @@
       return;
     }
     svgSets = new svgSprites();
-    svgURLs = document.querySelectorAll('[svg-sprites-loader]');
+    svgURLs = document.querySelectorAll('[svg-sprites-render]');
     if (!svgURLs || svgURLs.length <= 0) {
       return;
     }
@@ -220,7 +216,6 @@
     init();
   } else if (document.addEventListener) {
     document.addEventListener('DOMContentLoaded', function() {
-      document.removeEventListener('DOMContentLoaded', arguments.callee, false);
       return init();
     }, false);
   }
