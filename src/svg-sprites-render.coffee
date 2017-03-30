@@ -2,22 +2,18 @@
 # Svg Sprites Render
 #
 # Description: Load svg file and place into html <svg>.
-# http://www.soopro.com
+# http://soopro.org
 #
 # Author:   redy
-# Date:     14 July 2015
 # -------------------------------
 
-if not window
-  throw new Error("For web browser only!!")
-
 window.svgSprites = ->
-  version = '1.1.0'
-  
+  version = '1.1.1'
+
   sprites = {}
   load_stack = []
   self = @
-  
+
   request = (opts) ->
     if not opts
       throw new Error("Request Options is required");
@@ -26,7 +22,7 @@ window.svgSprites = ->
     req_user = opts.user or ''
     req_password = opts.password or ''
     req_timeout = opts.timeout or 0
-    
+
     if not req_url
       throw new Error("Request URL is required");
 
@@ -35,12 +31,12 @@ window.svgSprites = ->
     complete_callback = opts.complete
 
     xmlhttp = new XMLHttpRequest()
-    
+
     # timeout
     xmlhttp.timeout = req_timeout
     xmlhttp.ontimeout = ->
       console.error("The request for "+req_url+" timed out.")
-    
+
     # statechange
     xmlhttp.onreadystatechange = ->
       if xmlhttp.readyState == XMLHttpRequest.DONE
@@ -53,14 +49,14 @@ window.svgSprites = ->
         if typeof(complete_callback) is 'function'
           complete_callback(xmlhttp.response, xmlhttp.status)
       return
-    
+
     # fire
     xmlhttp.open("GET", req_url, req_async, req_user, req_password)
     xmlhttp.setRequestHeader("Accept", "text/xml")
     xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xmlhttp.send()
 
-  
+
   remove_load = (str)->
     idx = load_stack.indexOf(str)
     if idx > -1
@@ -78,7 +74,7 @@ window.svgSprites = ->
         if not view_box
           continue
         if svg.id not in sprites[name]
-          sprites[name][svg.id] = 
+          sprites[name][svg.id] =
             children: (child for child in svg.childNodes \
                                          when child.nodeType is 1)
             view: view_box
@@ -87,23 +83,23 @@ window.svgSprites = ->
       catch err
         console.error err
     return
-  
+
   isHTMLElement = (o) ->
     is_obj = o and typeof o == 'object' and o != null
     is_obj_type = o.nodeType is 1 and typeof o.nodeName is 'string'
     result =  is_obj and is_obj_type
     return result
-  
+
   render_svg = (element) ->
     if not element or not isHTMLElement(element)
       element = document
-    
+
     if element.nodeName.toUpperCase() is 'SVG' \
     and element.getAttribute("svg-sprite")
       svg_elements = [element]
     else
       svg_elements = element.querySelectorAll("svg[svg-sprite]")
-    
+
     for svg in svg_elements
       target = svg.getAttribute("svg-sprite")
       if not target
@@ -112,7 +108,7 @@ window.svgSprites = ->
       target_split = target.split(":")
       if target_split.length < 2
         continue
-      
+
       gp = target_split[0]
       id = target_split[1]
 
@@ -120,7 +116,7 @@ window.svgSprites = ->
 
       while svg.firstChild
         svg.removeChild(svg.firstChild)
-      
+
       if id and group and group.hasOwnProperty(id)
         for child in group[id].children
           svg.appendChild(child.cloneNode(true))
@@ -130,19 +126,19 @@ window.svgSprites = ->
         console.log gp, id
         console.log sprites, group
     return
-  
+
   @load = (svg_url, svg_name) ->
     if not svg_name
       svg_name = svg_url.replace(/^.*[\\\/]/, '')
-    
+
     load_stack.push(svg_url)
-    
+
     console.log "SVG Sprites load "+svg_url+" ["+svg_name+"]"
-    
+
     request
       type: 'GET'
       url: svg_url
-      success: (data) ->        
+      success: (data) ->
         append_svg(data, svg_name)
         remove_load(svg_url)
       error: (xhr, type) ->
@@ -150,12 +146,12 @@ window.svgSprites = ->
         remove_load(svg_url)
         return
     return
-  
+
   @render = (element, timeout)->
     if not timeout
       timeout = 30000
     timeout = new Date().getTime()+timeout
-    
+
     timer = setInterval ->
       try
         if load_stack.length <= 0
@@ -167,9 +163,9 @@ window.svgSprites = ->
       catch err
         console.error err
     , 100
-    
+
     return
-    
+
   return @
 
 inited = false
@@ -178,7 +174,7 @@ init = ->
   if inited
     return
   svgSets = new svgSprites()
-  svgURLs = document.querySelectorAll '[svg-sprites-loader]'
+  svgURLs = document.querySelectorAll '[svg-sprites-render]'
   if not svgURLs or svgURLs.length <= 0
     return
   for spr in svgURLs
@@ -193,7 +189,4 @@ init = ->
 if document.readyState == "complete" or document.readyState == "loaded"
     init()
 else if document.addEventListener
-  document.addEventListener 'DOMContentLoaded', ->
-    document.removeEventListener 'DOMContentLoaded', arguments.callee, false
-    init()
-  , false
+  document.addEventListener 'DOMContentLoaded', -> init(), false
